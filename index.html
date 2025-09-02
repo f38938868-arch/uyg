@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AutoShorts — Home</title>
+    <meta name="description" content="Generate short, scrollable videos with animated backgrounds and captions." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%236f7dff'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='34' fill='white'%3EA%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">AutoShorts</div>
+        <nav class="nav">
+          <a href="./studio.html" class="btn primary">Start Creating</a>
+          <a href="./signin.html" class="btn">Sign In</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <h1>Create snackable videos in seconds</h1>
+          <p>Pick tags, generate a short with animated visuals and captions, and download.</p>
+          <div class="cta-row">
+            <a href="./studio.html" class="btn primary">Open Studio</a>
+            <a href="#features" class="btn" id="see-features">See Features</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="container">
+          <h2>What you can do</h2>
+          <ul class="feature-list">
+            <li><strong>Animated backgrounds</strong> for a satisfying, scroll-like vibe</li>
+            <li><strong>Auto captions</strong> planned from your generated script</li>
+            <li><strong>One-click recording</strong> to WebM for easy download</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© <span id="year"></span> AutoShorts</div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      document.getElementById('see-features').addEventListener('click', function (e) {
+        e.preventDefault();
+        const el = document.getElementById('features');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+    </script>
+  </body>
+  </html>
+
+
