@@ -188,6 +188,24 @@
     return (sentences.length ? sentences : [text]).slice(0, 5);
   }
 
+  async function fetchServerStoryLines({ prompt, tags, model }) {
+    const res = await fetch('/api/story', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, tags, model })
+    });
+    if (!res.ok) throw new Error('Server story endpoint failed');
+    const data = await res.json();
+    const text = data.text || '';
+    const lines = text
+      .split(/\n+/)
+      .map(s => s.replace(/^[-•\d\.\)\s]+/, '').trim())
+      .filter(Boolean);
+    if (lines.length >= 3) return lines.slice(0, 5);
+    const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
+    return (sentences.length ? sentences : [text]).slice(0, 5);
+  }
+
   function planCaptionsFromLines(lines, totalSec) {
     const minSec = 1.2;
     const n = Math.max(1, lines.length);
@@ -252,6 +270,18 @@
     return audioBuffer;
   }
 
+  async function fetchElevenLabsTTSServer({ text, voiceId }) {
+    const res = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voiceId })
+    });
+    if (!res.ok) throw new Error('Server TTS endpoint failed');
+    const buf = await res.arrayBuffer();
+    const ctx = getAudioContext();
+    return await ctx.decodeAudioData(buf);
+  }
+
   function disableDuringGenerate(disabled) {
     generateBtn.disabled = disabled;
     stopBtn.disabled = !disabled;
@@ -307,12 +337,17 @@
     const prompt = promptInput && promptInput.value;
 
     if (wantAI) {
+      // Prefer server endpoint; fallback to direct provider with key; finally local
       try {
-        if (!apiKey) throw new Error('Missing API key');
-        lines = await fetchAIStoryLines({ prompt, tags, apiKey, model });
-      } catch (err) {
-        console.warn('AI generation failed, falling back to local:', err);
-        lines = generateStoryLines(tags);
+        lines = await fetchServerStoryLines({ prompt, tags, model });
+      } catch (_) {
+        try {
+          if (!apiKey) throw new Error('Missing API key');
+          lines = await fetchAIStoryLines({ prompt, tags, apiKey, model });
+        } catch (err) {
+          console.warn('AI generation failed, falling back to local:', err);
+          lines = generateStoryLines(tags);
+        }
       }
     } else {
       lines = generateStoryLines(tags);
@@ -323,10 +358,17 @@
     const xiKey = xiKeyInput && xiKeyInput.value;
     const xiVoice = xiVoiceInput && xiVoiceInput.value;
 
-    if (wantXI && xiKey) {
+    if (wantXI) {
       try {
         const textForTTS = lines.join(' ');
-        const audioBuf = await fetchElevenLabsTTS({ text: textForTTS, voiceId: xiVoice || '21m00Tcm4TlvDq8ikWAM', apiKey: xiKey });
+        // Prefer server TTS; fallback to direct if key provided
+        let audioBuf;
+        try {
+          audioBuf = await fetchElevenLabsTTSServer({ text: textForTTS, voiceId: xiVoice || '21m00Tcm4TlvDq8ikWAM' });
+        } catch (_) {
+          if (!xiKey) throw new Error('Missing XI key for direct TTS');
+          audioBuf = await fetchElevenLabsTTS({ text: textForTTS, voiceId: xiVoice || '21m00Tcm4TlvDq8ikWAM', apiKey: xiKey });
+        }
         const ctx = getAudioContext();
         const dest = ctx.createMediaStreamDestination();
         const gain = ctx.createGain();

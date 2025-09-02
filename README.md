@@ -48,7 +48,10 @@ Netlify (drag-and-drop)
 Vercel (import repo)
 1. Import your GitHub repo in Vercel.
 2. Framework preset: Other. Build command: none. Output dir: /.
-3. Deploy and open the URL (for example https://project.vercel.app/studio.html).
+3. Add Environment Variables in Vercel → Settings → Environment Variables:
+   - OPENAI_API_KEY = your OpenAI key
+   - ELEVENLABS_API_KEY = your ElevenLabs key
+4. Deploy and open the URL (for example https://project.vercel.app/studio.html).
 
 Cloudflare Pages
 1. Create a new Pages project → Connect to Git.
