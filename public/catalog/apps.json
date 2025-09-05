@@ -1,0 +1,33 @@
+[
+  {
+    "manifestUrl": "/apps/hello-world.manifest.mjs",
+    "title": "Hello World",
+    "icon": "✨"
+  },
+  {
+    "manifestUrl": "/apps/sticky-notes.manifest.mjs",
+    "title": "Sticky Notes",
+    "icon": "🗒️"
+  },
+  {
+    "manifestUrl": "/apps/pomodoro.manifest.mjs",
+    "title": "Pomodoro",
+    "icon": "⏳"
+  },
+  {
+    "manifestUrl": "/apps/tic-tac-toe.manifest.mjs",
+    "title": "Tic Tac Toe",
+    "icon": "❎"
+  },
+  {
+    "manifestUrl": "/apps/snake.manifest.mjs",
+    "title": "Snake",
+    "icon": "🐍"
+  },
+  {
+    "manifestUrl": "/apps/flappy.manifest.mjs",
+    "title": "Flappy",
+    "icon": "🐤"
+  }
+]
+
