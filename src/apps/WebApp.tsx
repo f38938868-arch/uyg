@@ -128,7 +128,7 @@ export const WebApp: React.FC = () => {
         sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-modals"
         onLoad={() => { setLoading(false); setStatus(''); if (timeoutRef.current) window.clearTimeout(timeoutRef.current); }}
         onError={() => { setLoading(false); setError('Could not load message'); }}
-        srcdoc="<!doctype html><html><body style='font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 16px; color: #e6f1ff; background: transparent;'>Pages open in your browser now. Use the URL bar above or the quick links.</body></html>"
+        srcDoc="<!doctype html><html><body style='font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 16px; color: #e6f1ff; background: transparent;'>Pages open in your browser now. Use the URL bar above or the quick links.</body></html>"
       />
     </div>
   );
